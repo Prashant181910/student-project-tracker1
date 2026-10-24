@@ -1,0 +1,46 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<c:set var="ctx" value="${pageContext.request.contextPath}"/>
+<c:set var="user" value="${sessionScope.user}"/>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Student Project Proposal and Progress Tracking System</title>
+  <link rel="stylesheet" href="${ctx}/css/style.css">
+</head>
+<body>
+<header>
+  <div>
+    <h1>Student Project Proposal and Progress Tracking System</h1>
+    <small>Group G3 &middot; Prashant Kumar &amp; Uditansh Pant</small>
+  </div>
+  <c:if test="${not empty user}">
+    <div>
+      <c:out value="${user.name}"/> (${user.role})
+      <a class="btn ghost small" href="${ctx}/auth?action=logout">Logout</a>
+    </div>
+  </c:if>
+</header>
+<main>
+<c:if test="${not empty user}">
+  <div class="tabs">
+    <a class="${requestScope.nav == 'dashboard' ? 'active' : ''}" href="${ctx}/dashboard">Dashboard</a>
+    <c:choose>
+      <c:when test="${user.student}">
+        <a class="${requestScope.nav == 'new' ? 'active' : ''}" href="${ctx}/project?action=new">New Proposal</a>
+        <a class="${requestScope.nav == 'mine' ? 'active' : ''}" href="${ctx}/project">My Projects</a>
+      </c:when>
+      <c:otherwise>
+        <a class="${requestScope.nav == 'all' ? 'active' : ''}" href="${ctx}/project">All Projects</a>
+        <a class="${requestScope.nav == 'pending' ? 'active' : ''}" href="${ctx}/project?view=pending">Pending Review</a>
+      </c:otherwise>
+    </c:choose>
+  </div>
+</c:if>
+<c:if test="${not empty sessionScope.flash}">
+  <div class="flash"><c:out value="${sessionScope.flash}"/></div>
+  <c:remove var="flash" scope="session"/>
+</c:if>
